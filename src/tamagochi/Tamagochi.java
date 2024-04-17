@@ -1,5 +1,6 @@
 package tamagochi;
 
+import javax.sound.midi.Soundbank;
 import java.util.HashMap;
 
 public abstract class Tamagochi {
@@ -10,6 +11,16 @@ public abstract class Tamagochi {
     private int weight;
     private int energy;
     private HashMap<Integer, Tamagochi> friends;
+
+    public Tamagochi(int id, String name ) {
+        this.id = id;
+        this.name = name;
+        this.hunger = 5;
+        this.happiness = 5;
+        this.weight = 5;
+        this.energy = 5;
+        friends = new HashMap<>();
+    }
 
     public void feed() {
         hunger--;
@@ -39,7 +50,7 @@ public abstract class Tamagochi {
             friend.hunger++;
             friend.energy--;
         } else {
-            System.out.println("Friend not found.");
+            System.out.println("Amigo no encontrado");
         }
     }
 
@@ -47,8 +58,12 @@ public abstract class Tamagochi {
         friends.put(friend.getId(), friend);
     }
 
-    public void removeFriend(Tamagochi friend) {
-        friends.remove(friend.getId());
+    public void removeFriend(int friendId) {
+        if (friends.containsKey(friendId)) {
+            friends.remove(friendId);
+        } else {
+            System.out.println("Amigo no encontrado.");
+        }
     }
 
     public void printFriends() {
@@ -57,7 +72,24 @@ public abstract class Tamagochi {
         }
     }
 
+   public void printStatus() {
+       System.out.println("Nombre: " + name +  " Hambre: " + hunger + " Felicidad: " + happiness + " Peso: " + weight + " Energia: " + energy);
+    }
 
+    public void printWarnings() {
+        if (hunger > 5) {
+            System.out.println("Tengo hambre!");
+        }
+        if (happiness < 5) {
+            System.out.println("Estoy triste!");
+        }
+        if (weight > 10) {
+            System.out.println("Estoy gordo!");
+        }
+        if (energy < 5) {
+            System.out.println("Estoy cansado!");
+        }
+    }
 
     public abstract void greet();
 
