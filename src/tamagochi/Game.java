@@ -9,6 +9,7 @@ public class Game {
     public static void main(String[] args) {
         boolean isRunning = true;
         Tamagochi tamagochi = null;
+        Thread timeThread = null;
 
         // Tamagochis base
         Cat gaton = new Cat(1, "Gaton");
@@ -49,6 +50,13 @@ public class Game {
                     default:
                         System.out.println("Opción invalida.");
                 }
+
+                // Se inicia el hilo del tiempo
+                if (tamagochi != null) {
+                    timeThread = new TamagochiTimeThread(tamagochi);
+                    timeThread.start();
+                }
+
             } else {
                 tamagochi.printStatus();
                 System.out.println("Elige una accion:");

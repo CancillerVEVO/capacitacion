@@ -1,6 +1,5 @@
 package tamagochi;
 
-import javax.sound.midi.Soundbank;
 import java.util.HashMap;
 
 public abstract class Tamagochi {
@@ -10,7 +9,12 @@ public abstract class Tamagochi {
     private int happiness;
     private int weight;
     private int energy;
+    private boolean isDead;
     private HashMap<Integer, Tamagochi> friends;
+
+    public static final int HUNGER_DEAD_THRESHOLD = 20;
+    public static final int ENERGY_DEAD_THRESHOLD = 0;
+
 
     public Tamagochi(int id, String name ) {
         this.id = id;
@@ -19,38 +23,76 @@ public abstract class Tamagochi {
         this.happiness = 5;
         this.weight = 5;
         this.energy = 5;
+        this.isDead = false;
         friends = new HashMap<>();
     }
 
     public void feed() {
-        hunger--;
-        weight++;
-        energy++;
+        if (!isDead) {
+            hunger--;
+            weight++;
+            energy++;
+        } else {
+            System.out.println("No puedo comer, estoy muerto.");
+        }
     }
 
     public void play() {
-        happiness++;
-        hunger++;
-        energy--;
-    }
-
-    public void sleep() {
-        energy++;
-        hunger++;
-    }
-
-    public void playWithFriend(int friendId) {
-        Tamagochi friend = friends.get(friendId);
-        if (friend != null) {
+        if (!isDead) {
             happiness++;
             hunger++;
             energy--;
 
-            friend.happiness++;
-            friend.hunger++;
-            friend.energy--;
+            if (hunger > HUNGER_DEAD_THRESHOLD || energy < ENERGY_DEAD_THRESHOLD) {
+                isDead = true;
+            }
         } else {
-            System.out.println("Amigo no encontrado");
+            System.out.println("No puedo jugar, estoy muerto.");
+        }
+    }
+
+    public void sleep() {
+        if (!isDead) {
+            energy += 5;
+            hunger++;
+
+            if (hunger > HUNGER_DEAD_THRESHOLD) {
+                isDead = true;
+            }
+
+        } else {
+            System.out.println("No puedo dormir, estoy muerto.");
+        }
+
+    }
+
+    public void playWithFriend(int friendId) {
+        if (!isDead) {
+            Tamagochi friend = friends.get(friendId);
+            if (friend != null) {
+                happiness++;
+                hunger++;
+                energy--;
+
+                if (hunger > HUNGER_DEAD_THRESHOLD || energy < ENERGY_DEAD_THRESHOLD) {
+                    isDead = true;
+                }
+
+                // Tambien actualizar el estado para el tamagochi amigo
+
+                friend.happiness++;
+                friend.hunger++;
+                friend.energy--;
+
+                if (friend.hunger > HUNGER_DEAD_THRESHOLD || friend.energy < ENERGY_DEAD_THRESHOLD) {
+                    friend.setDead(true);
+                }
+
+            } else {
+                System.out.println("Amigo no encontrado");
+            }
+        } else {
+            System.out.println("No puedo jugar, estoy muerto.");
         }
     }
 
@@ -73,11 +115,11 @@ public abstract class Tamagochi {
     }
 
    public void printStatus() {
-       System.out.println("Nombre: " + name +  " Hambre: " + hunger + " Felicidad: " + happiness + " Peso: " + weight + " Energia: " + energy);
+       System.out.println("Nombre: " + name +  " Hambre: " + hunger + " Felicidad: " + happiness + " Peso: " + weight + " Energia: " + energy + " Muerto: " + isDead);
     }
 
     public void printWarnings() {
-        if (hunger > 5) {
+        if (hunger > 10) {
             System.out.println("Tengo hambre!");
         }
         if (happiness < 5) {
@@ -147,5 +189,19 @@ public abstract class Tamagochi {
 
     public void setEnergy(int energy) {
         this.energy = energy;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public void checkIfDead() {
+        if (hunger > HUNGER_DEAD_THRESHOLD || energy < ENERGY_DEAD_THRESHOLD) {
+            isDead = true;
+        }
     }
 }
