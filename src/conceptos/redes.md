@@ -66,14 +66,13 @@ El sistema DNS es una base de datos distribuida que almacena registros de recurs
 
 #### RIP
 RIP (Routing Information Protocol) es un protocolo de enrutamiento de vector de distancia que se utiliza para intercambiar informacion de enrutamiento entre routers.
-RIP es un protocolo de capa de aplicacion.
 
 * El puerto UDP por defecto para RIP es el 520.
 
 RIP es un protocolo de enrutamiento de capa de red que utiliza el algoritmo de Bellman-Ford para determinar la mejor ruta a una red de destino. 
 
 #### SNMP
-
+(Simple Network Management Protocol)
 SNMP es un protocolo de capa de aplicacion que permite a los administradores de red supervisar y gestionar dispositivos de red, como routers, switches, servidores y estaciones de trabajo.
 * El puerto UDP por defecto para SNMP es el 161.
 
