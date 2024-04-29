@@ -80,20 +80,53 @@ SNMP es un protocolo de capa de aplicacion que permite a los administradores de 
 
 
 ### 4. TCP y UDP
-
-#### TCP (Transmission Control Protocol)
-El protocolo TCP es uno de los protocolos de transporte mas importantes en Internet.
-TCP es un protocolo orientado a la conexion que proporciona una comunicacion fiable y ordenada entre dos dispositivos de red.
-##### Pasos de una conexion TCP:
-1. Establecimiento de la conexion (3-way handshake)
-2. Transferencia de datos
-3. Cierre de la conexion (4-way handshake)
-* TCP es un protocolo de capa de transporte.
-
-
-
+TCP (Transmission Control Protocol) y UDP (User Datagram Protocol) son dos protocolos de transporte utilizados en Internet.
+* TCP es usado para aplicaciones que requieren una comunicacion fiable y ordenada, como la transferencia de archivos, el correo electronico y la navegacion web.
+* UDP es usado para aplicaciones que requieran de comunicacion en tiempo real, como la transmision de audio y video, juegos en linea y la transmision de datos en tiempo real.
 ### 5. IP y Puertos
+Una direccion IP es un identificador número único asignado a cada dispositivo conectado a una red que utiliza el protocolo IP.
+La direccion IP se utiliza para identificar y localizar un dispositivo en una red.
+Existen dos versiones de IP: IPv4 e IPv6.
+* IPv4: 32 bits (4 bytes) (binario)
+* IPv6: 128 bits (16 bytes) (hexadecimal)
+
+Un puerto tambien es un identificador asignado a un proceso o servicio en un dispositivo de red.
+Un puerto se utiliza para direccionar el trafico de red a un proceso o servicio especifico en un dispositivo de red.
+
+Hay puertos que estan reservados para servicios especificos, como el puerto 80 para HTTP, el puerto 443 para HTTPS, el puerto 25 para SMTP, el puerto 21 para FTP, etc.
+
 ### 6. Http (v1, v2, v3)
+HTTP (protocolo de transferencia de hipertexto) es un protocolo de red utilizado para enviar y recibir mensajes en la web.
+#### HTTP/1.1
+En HTTP/1.0 cada solicitud HTTP requería una conexión TCP separada. En HTTP/1.1, se introdujo la persistencia de la conexión, lo que permitió a un cliente enviar múltiples solicitudes a través de la misma conexión TCP.
+(osea solicitar paginas de HTML, frames, imagenes, scripts, etc. en una sola conexion TCP).
+* HTTP/1.1 es un protocolo de texto legible por humanos, lo que significa que los mensajes HTTP se envían en formato de texto.
+* HTTP/1.1 es un protocolo sin estado, lo que significa que cada solicitud HTTP se procesa de forma independiente, sin tener en cuenta las solicitudes anteriores.
+* 
+#### HTTP/2
+El protocolo HTTP/2, tiene notables diferencias fundamentales respecto a la versión anterior HTTP/1.1
+* HTTP/2 es binario, en lugar de textual: En HTTP/1.1, los mensajes intercambiados entre el cliente y el servidor eran principalmente en formato de texto legible para los humanos. Esto implicaba que el servidor tenía que interpretar cada línea de solicitud o respuesta. En cambio, en HTTP/2, los mensajes se codifican en formato binario, lo que significa que la información se representa en 1 y 0, lo que permite una transmisión más eficiente y un procesamiento más rápido por parte del servidor. 
+* Es un protocolo multiplexado. Peticiones paralelas pueden hacerse sobre la misma connexión, no está sujeto pues a mantener el orden de los mensajes, ni otras restricciónes que tenian los protocolos anteriores HTTP/1.x
+##### Sobre Multiplexin
+En HTTP/1.1, cada solicitud requería su propia conexión TCP. HTTP/2, en cambio, permite múltiples solicitudes y respuestas en una sola conexión TCP
+Esto se llama multiplexación y permite que múltiples solicitudes se envíen y reciban simultáneamente sobre la misma conexión. Esto mejora significativamente la eficiencia y reduce la latencia.
+* HTTP/2 permite la compresión de cabeceras, lo que reduce el tamaño de las peticiones y respuestas.
+* Esto permite al servidor almacenar datos en la caché del cliente, previamente a que estos sean pedidos, mediante un mecanismo denominado 'server push'. 
+#### HTTP/3
+HTTP/3 es la tercera versión del protocolo HTTP, basado en QUIC, un protocolo de transporte desarrollado por Google.
+Quic (Quick UDP Internet Connections) es un protocolo de transporte que utiliza UDP en lugar de TCP.
 ### 7. Https
+HTTPS (Hypertext Transfer Protocol Secure) es una versión segura de HTTP que utiliza cifrado SSL/TLS para proteger la comunicación entre el cliente y el servidor.
 ### 8. SSL/TLS
+El Nivel de Conectores Seguros (Secure Sockets Layer o SSL) fue el protocolo de cifrado más ampliamente utilizado para garantizar la seguridad de las comunicaciones a través de Internet antes de ser sustituido por el TLS (Inglés) (Seguridad de la Capa de Transporte, o Transport Layer Security) en 1999. Aunque el desuso del protocolo SSL dio paso a la adopción del TLS, la mayoría de personas sigue refiriéndose a este tipo de tecnología como «SSL».
+
+El mayor cambio en el desarrollo de HTTP, fue a finales de 1994.
+En vez de trasmitir HTTP sobre la capa de TCP/IP, se creo una capa adicional sobre esta: SSL. La versión SSL 1.0 nunca fue publicada fuera de las compañías desarrolladoras, pero el SSL 2.0 y sus sucesoras SSL 3.0 y SSL 3.1 permitieron la creación del comercio electrónico en la Web (e-commerce), encriptando y garantizando la autenticidad de los mensajes intercambiados entre servidor y cliente. SSL se añadió a la lista de estándares y posteriormente evolucionó hasta ser el protocolo TLS, con versiones 1.0, 1.1 y 1.2, que fueron apareciendo para resolver vulnerabilidades. Actualmente se está desarrollando el protocolo TLS 1.3.
 ### 9. CORS
+CORS (Cross-Origin Resource Sharing) es un mecanismo de headers HTTP que permite a un servidor indicar a un navegador web que permita a un cliente acceder a recursos de un servidor en un origen distinto al del propio servidor.
+
+POR EJEMPLO: Digamos que tenemos un frontend de Javascript con dominio: 
+* https://www.dominio-a.com al que llamaremos A
+* y un backend con dominio: https://www.dominio-b.com al que llamaremos B
+
+Si el frontend de A hace una petición a un recurso en el backend de B, el navegador bloqueará la petición por motivos de seguridad. CORS permite al servidor de B indicar al navegador de A que permita la petición.
