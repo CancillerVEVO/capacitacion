@@ -109,8 +109,126 @@ XML y JSON son dos maneras diferentes de representar informacion estructurada qu
   }
 }
 ```
-
 #### 3. gRPC y GraphQL
+#### 3.1 gRPC
+##### 3.1.1 ¿Qué es RPC?
+Un RPC (Remote Procedure Call) es cuando un programa de computadora causa que un procedimiento (subrutina) se ejecute en un sistema remoto
+(Una computadora diferente en una red compartida), este procedimiento se ejecuta como si fuera una subrutina local, sin que el programador tenga que preocuparse por los detalles de la red.
+
+EN TERMINOS SIMPLES: 
+Es una manera para que un programa le diga a otro programa, aunque estén en diferentes computadoras, que ejecute una función por el.
+La funcion se ejecutara como si estuviera en la misma computadora, pero no esta. El framework de RPC se encarga de abstractar la complejidad de la red.
+##### 3.1.2 ¿Qué es gRPC?
+gRPC es un framework de RPC que te permite conectar, invocar, operar y debugear servicios distribuidos de manera tan facil como si estuvieras haciendo llamadas a funciones locales.
+
+Lo primero que se hace al desarrollar una aplicacion con gRPC es definir una interface de servicio. La definicion de la interface de servicio
+contiene los metodos que el servicio proporciona y los tipos de mensajes que se envian y reciben. Se utilizan lenguajes conocidos como "interface definition language" (IDL) para definir la interface de servicio.
+El lenguaje de IDL mas comunmente utilizado con gRPC es Protocol Buffers.
+
+##### 3.1.3 Protocol Buffers
+Protocol Buffers es un IDL agnostico de lenguaje y plataforma para definir schemas e interfaces de programacion. 
+Un ejemplo de un protofile (person.proto) que define un mensaje de persona: 
+```proto
+message Person {
+  required string name = 1;
+  required int32 id = 2;
+  optional string email = 3;
+}
+```
+
+Este protofile sirve como un contrato entre el servidor y el cliente. Si quieres cambiar como esta etsructurada la entidad o como se comportan tus respuestas y peticiones, solo tienes que cambiar el protofile y recompilarlo.
+##### 3.1.4 gRPC vs JSON
+<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*5FQlqnQGK-JFFZxc0gSHhw.png" alt="Protocol Buffers vs JSON" width="700px">
+
+#### 3.2 GraphQL
+GraphQL es un lenguaje lenguaje de consulta y manipulacion de datos para APIs. La prioridad de GraphQL es permitir a los clientes solicitar solo la informacion que necesitan, y nada mas.
+A comparacion de REST, con GraphQL los clientes pueden especificar exactamente que datos necesitan y la API solo devolvera esos datos.
+
+GraphQL al igual que un API Rest se comunica a traves de HTTP, pero en lugar de tener diferentes endpoints para diferentes recursos, GraphQL tiene un solo endpoint y los clientes pueden solicitar los datos que necesitan a traves de una consulta.
+
+En GraphQL existe el concepto de Schema, que define los tipos de datos que se pueden consultar y las operaciones que se pueden realizar. El Schema de GraphQL se define utilizando el lenguaje de definicion de esquemas de GraphQL (GraphQL SDL).
+Cuando un cliente envia una consulta a un servidor GraphQL, el servidor valida la consulta contra el Schema y devuelve los datos solicitados.
+
+El desarrollador de GraphQL  pone todos los datos del esquema en una funcion llamada "resolver". Esta funcion se encarga de devolver los datos solicitados por el cliente.
+
+Desde el punto de vista del cliente, las operaciones mas comunes de GraphQL son: queries y mutations.
+
+- **Queries**: Se utilizan para leer datos de la API (leer).
+- **Mutations**: Se utilizan para escribir datos en la API (crear, actualizar y eliminar).
+
+Ejemplo de consulta GraphQL:
+```graphql
+query {
+  user(id: 1) {
+    name
+    email
+  }
+}
+```
+Respuesta: 
+```json
+{
+  "data": {
+    "user": {
+      "name": "John Doe",
+      "email": "john.doe@mail.com"
+    }
+  }
+}
+```
+
+Como podemos ver en el ejemplo, la consulta GraphQL es muy similar a un objeto JSON. El cliente solicita los datos que necesita y el servidor devuelve solo esos datos.
+Una consulta mas complicada puede verse así: 
+```graphql
+query {
+  user(id: 1) {
+    name
+    email
+    posts {
+      title
+      body
+    }
+  }
+}
+```
+Respuesta: 
+```json
+{
+  "data": {
+    "user": {
+      "name": "John Doe",
+      "email": "john.doe@mail.com",
+        "posts": [
+            {
+            "title": "Post 1",
+            "body": "Body of post 1"
+            },
+            {
+            "title": "Post 2",
+            "body": "Body of post 2"
+            }
+        ]
+      }
+    }
+}
+```
+
+Como podemos ver solo nos regresa los datos que solicitamos.
 #### 4. Java RMI
+Java RMI (Remote Method Invocation) es un API del lenguaje Java que permite a un objeto en una maquina virtual Java (JVM) invocar metodos en un objeto en otra JVM.
+Es el equivalente de Java a RPC (Remote Procedure Call) en otros lenguajes de programacion. La implementacion del API solo permite llamadas a metodos entre JVMs que esten en la misma red.
+El protocolo detras de la implementacion de solo JVM se llamada JRMP (Java Remote Method Protocol). Para correr codigo en un contexto sin JVM, se hizo COBRA (Common Object Request Broker Architecture).
 #### 5. CORBA
+CORBA (Common Object Request Broker Architecture) es un estandar de la OMG (Object Management Group) diseñado para facilitar la comunicacion de sistemas distribuidos.
+COBRA permite la colaboracion entre sistemas con diferentes lenguajes de programacion, hardware y software.
 #### 6. Mensajería Asíncrona y Síncrona
+Los sistemas que se comunican entre sí pueden hacerlo de dos maneras: de forma sincrona o asincrona.
+##### 6.1 Mensajeria Sincrona
+El emisor envia un mensaje y el receptor espera una respyesta antes de continuar con su proceso.
+El emisor y receptor estan sincronizados en el tiempo.
+##### 6.2 Mensajeria Asincrona
+El emisor envia un mensaje y el receptor no espera una respuesta inmediata. Esto significa que el emisor puede continuar 
+con su proceso sin esperar una respuesta del receptor. 
+
+En lugar de bloquear el flujo del programa, la mensajería asincrona permite que el emisor y el receptor operen de manera independiente,
+lo que puede mejorar la eficiencia y la escalabilidad del sistema.
