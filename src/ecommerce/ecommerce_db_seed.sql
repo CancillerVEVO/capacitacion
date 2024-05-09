@@ -85,7 +85,72 @@ CREATE TABLE IF NOT EXISTS products_categories
 DROP TABLE IF EXISTS tags;
 CREATE TABLE IF NOT EXISTS tags
 (
-    tag_id     SERIAL PRIMARY KEY,
+    tag_id     SERIAL PRIMARY K-- tabla de usuarios
+DROP TABLE IF EXISTS users CASCADE;
+CREATE TABLE IF NOT EXISTS users
+(
+    user_id      SERIAL PRIMARY KEY,
+    username      VARCHAR(63) UNIQUE,
+    email         VARCHAR(127) UNIQUE,
+    password      VARCHAR(255),
+    bio           TEXT,
+    created_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP WITH TIME ZONE,
+    updated_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at    TIMESTAMP WITH TIME ZONE
+
+);
+
+DROP TABLE IF EXISTS products CASCADE;
+CREATE TABLE IF NOT EXISTS products
+(
+    product_id   SERIAL PRIMARY KEY,
+    name         VARCHAR(63),
+    description  TEXT,
+    price        DECIMAL(10, 2),
+    stock        INT,
+    user_id      INT REFERENCES users(user_id),
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at   TIMESTAMP WITH TIME ZONE
+);
+
+DROP TABLE IF EXISTS shopping_cart CASCADE;
+CREATE TABLE IF NOT EXISTS shopping_cart
+(
+    user_id   INT,
+    product_id INT,
+    quantity   INT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP WITH TIME ZONE,
+    primary key (user_id, product_id)
+);
+
+DROP TABLE IF EXISTS orders CASCADE;
+CREATE TABLE IF NOT EXISTS orders
+(
+    order_id  SERIAL PRIMARY KEY,
+    user_id   INT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP WITH TIME ZONE
+);
+
+DROP TABLE IF EXISTS order_items CASCADE;
+CREATE TABLE IF NOT EXISTS order_items
+(
+    order_id INT,
+    product_id INT,
+    total      DECIMAL(10, 2),
+    quantity   INT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP WITH TIME ZONE,
+    PRIMARY KEY (order_id, product_id)
+);
+
+EY,
     name       VARCHAR(100) UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -218,5 +283,30 @@ CREATE TABLE IF NOT EXISTS payment_methods
 
 
 
+DROP TABLE IF EXISTS orders;
+CREATE TABLE IF NOT EXISTS orders
+(
+    order_id   SERIAL PRIMARY KEY,
+    user_id      INT REFERENCES users(user_id),
+    address_id   INT REFERENCES addresses(address_id),
+    payment_method_id INT REFERENCES payment_methods(payment_method_id),
+    shipping_method_id INT REFERENCES shipping_methods(shipping_method_id),
+    total_amount DECIMAL(10, 2),
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at   TIMESTAMP WITH TIME ZONE
+                               );
+)
 
 
+DROP TABLE IF EXISTS shopping_cart;
+CREATE TABLE IF NOT EXISTS shopping_cart
+(
+    user_id   INT REFERENCES users(user_id),
+    product_id INT REFERENCES products(product_id),
+    quantity   INT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP WITH TIME ZONE,
+    PRIMARY KEY (user_id, product_id)
+)
